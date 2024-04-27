@@ -2,8 +2,10 @@
 {% block title %}
     Data Science - {{ phase.name }}
 {% endblock %}
+
 {% block content %}
 <div class="container mt-4" style="max-width: 700px;">
+<a href="/">&larr; home</a>
 <h2>{{ phase.name }}</h2>
 <div class="accordion" id="phases-accordion">
 {% for item in phase.topics %}

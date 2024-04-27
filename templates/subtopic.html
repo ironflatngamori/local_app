@@ -3,19 +3,50 @@
     Data Science - {{ subtopic.title }}
 {% endblock %}
 {% block content %}
-<div class="container">
+<div class="container mb-5">
+  <a href="#" onclick="history.back()">
+  &larr;&nbsp;Back
+  </a>
+
+    <h1>{{ subtopic.title }}</h1>
+    <hr>
     {% if subtopic %}
         <p id="{{subtopic.id}}">{{content | safe}}</p>
         {% if subtopic["git_repo"] %}
             <a href="{{subtopic["git_repo"]}}" class="btn btn-primary" target="_blank">View on Github</a>
-            <div id="md-{{subtopic.id}}"></div>
+            <div class="accordion my-5" id="accordionExample">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                  <button
+                    class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseOne"
+                    aria-expanded="false"
+                    aria-controls="collapseOne"
+                  >
+                    See Github Content
+                  </button>
+                </h2>
+                <div
+                  id="collapseOne"
+                  class="accordion-collapse collapse"
+                  aria-labelledby="headingOne"
+                  data-bs-parent="#accordionExample"
+                >
+                  <div class="accordion-body">
+                    <div id="md-{{subtopic.id}}"></div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
         {% endif %}
-    {% else %}
-        <h2>Subtopic not found</h2>
     {% endif %}
 </div>
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
     const setReadme = (data) => {
       const readme = document.createElement("div");
@@ -66,15 +97,12 @@
     console.log("Images fixed!")
   }
 
-</script>
-
-<script>
     const first_time = localStorage.getItem("first_time");
-    if (first_time === true) {
+    if (first_time === true || first_time === null) {
         console.log(first_time);
         localStorage.setItem("first_time", false);
         if (confirm("Buy me a coffee ?😅 ")) {
-            //document.location.href = "https://www.buymeacoffee.com/abhisheknaik96";
+            document.location.href = "https://www.buymeacoffee.com/ironf2520i";
         }
     }
 </script>
