@@ -1,0 +1,14 @@
+{% extends "master.html" %}
+{% block title %}
+    Phases
+{% endblock %}
+{% block content %}
+    <div class="container d-flex flex-column gap-2" style="max-width: 700px;">
+    <h2>Data Science Content</h2>
+    {% for phase in phases %}
+        <a href="/phases/{{ phase.id }}" class="card" style="padding: .5rem .75rem;">
+            {{ phase.name }}
+        </a>
+    {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "master.html" %}
+{% block title %}
+    Data Science - {{ subtopic.title }}
+{% endblock %}
+{% block content %}
+<div class="container">
+    {% if subtopic %}
+        <p id="{{subtopic.id}}">{{content | safe}}</p>
+        {% if subtopic["git_repo"] %}
+            <a href="{{subtopic["git_repo"]}}" class="btn btn-primary" target="_blank">View on Github</a>
+            <div id="md-{{subtopic.id}}"></div>
+        {% endif %}
+    {% else %}
+        <h2>Subtopic not found</h2>
+    {% endif %}
+</div>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<script>
+    const setReadme = (data) => {
+      const readme = document.createElement("div");
+      readme.innerHTML = marked.marked(data);
+      const content = document.querySelector("#md-{{subtopic.id}}");
+      content.appendChild(readme);
+    };
+    const subtopic = {{ subtopic | tojson }};
+    const saturn_cloud_a = document.querySelector(".inline_disabled");
+    if (saturn_cloud_a && subtopic["git_repo"]) {
+      saturn_cloud_a.remove();
+    }
+    if (subtopic["git_repo"]) {
+      const branch = subtopic["git_repo"].endsWith("lab")
+        ? "solution"
+        : "master";
+      const git_resource = subtopic["git_repo"].replace(
+        "https://github.com/",
+        "https://raw.githubusercontent.com/"
+      );
+
+      fetch(`${git_resource}/${branch}/README.md`, {
+        headers: {
+          Accept: "application/vnd.github.v3.raw",
+        },
+      })
+        .then((response) => response.text())
+        .then((data) => {
+          setReadme(data);
+          fixBrokenImages();
+        })
+        .catch(console.error);
+    }
+
+    function fixBrokenImages() {
+    console.log("Fixing broken images...")
+    const images = document.querySelectorAll("img");
+    images.forEach((img) => {
+      if (img.src && !img.src.startsWith("https://") && subtopic["git_repo"]) {
+        const to_remove = `${window.location.origin}${window.location.pathname
+          .split("/")
+          .slice(0, -1)
+          .join("/")}`;
+        const new_img_src = img.src.replace(to_remove, "");
+        img.src = `${subtopic["git_repo"]}/raw/master/${new_img_src}`;
+      }
+    });
+    console.log("Images fixed!")
+  }
+
+</script>
+
+<script>
+    const first_time = localStorage.getItem("first_time");
+    if (first_time === true) {
+        console.log(first_time);
+        localStorage.setItem("first_time", false);
+        if (confirm("Buy me a coffee ?😅 ")) {
+            //document.location.href = "https://www.buymeacoffee.com/abhisheknaik96";
+        }
+    }
+</script>
+
+{% endblock %}

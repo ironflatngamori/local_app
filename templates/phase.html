@@ -1,0 +1,45 @@
+{% extends "master.html" %}
+{% block title %}
+    Data Science - {{ phase.name }}
+{% endblock %}
+{% block content %}
+<div class="container mt-4" style="max-width: 700px;">
+<h2>{{ phase.name }}</h2>
+<div class="accordion" id="phases-accordion">
+{% for item in phase.topics %}
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne-{{item.id}}">
+            <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseOne-{{item.id}}"
+                aria-expanded="false"
+                aria-controls="collapseOne-{{item.id}}"
+            >
+                {{item.title}}
+            </button>
+        </h2>
+        <div
+            id="collapseOne-{{item.id}}"
+            class="accordion-collapse collapse"
+            aria-labelledby="headingOne-{{item.id}}"
+            data-bs-parent="#phases-accordion"
+        >
+            <div class="accordion-body">
+          <ul>
+            {% for subtopic in item.subtopics %}
+                <li key={index}>
+                  <a href="/phases/{{phase.id}}/topics/{{item.id}}/subtopics/{{subtopic.id}}">
+                    {{subtopic.title}}
+                  </a>
+                </li>
+            {% endfor %}
+          </ul>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+</div>
+{% endblock %}
